@@ -41,8 +41,8 @@ def getProb(initHam,newHam):
 	return np.exp(-(newHam-initHam)/(T))
 
 #Lennard-Jones potential (truncated)
-def lenJones(r):
-	energy = 4*epsilon*((sigma_12)/(r**12)-(sigma_6)/(r**6))+alpha*r+beta
+def lenJones(radius):
+	energy = 4*epsilon*((sigma_12)/(radius**12)-(sigma_6)/(radius**6))+alpha*radius+beta
 	return energy
 
 #Generate random displacement for a particle
@@ -94,7 +94,20 @@ print(B.getHam())
 B.displayParticles()
 
 # generate boxes 27 (3-dimensions) 
+
+boxes = [] 
+for box in range(27): # adds the 27 box objects to boxes list
+	boxes.append(box())
+
+# define pos of box objects
+
+
+
+
 # copy the box objects
+
+
+
 # 
 # determining potentals, pair potentials 
 # calculate boundry potentals, bend potential
