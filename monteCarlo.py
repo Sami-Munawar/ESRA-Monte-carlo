@@ -59,29 +59,43 @@ def getDis():
 
 #Classes
 class box():
-	
-	def __init__(self):
-		self.particles = np.array([particle() for i in range(N)])
-	
-	#Get system potential energy
-	def getHam(self):
-		ham = 0
-		for i in range(0,len(self.particles)-1):
-			for j in range(i+1,len(self.particles)):
-				r = np.linalg.norm(self.particles[j].pos-self.particles[i].pos)
-				if r < cutoff:
-					ham += lenJones(r)
-		return ham
-	
-	#Display particles in system
-	def displayParticles(self):
-		xList = [particle.pos[0] for particle in self.particles]
-		yList = [particle.pos[1] for particle in self.particles]
-		zList = [particle.pos[2] for particle in self.particles]
-		fig = plt.figure()
-		ax = fig.add_subplot(projection='3d')
-		ax.scatter(xList,yList,zList,marker="o")
-		plt.show()
+    
+    def __init__(self):
+        self.particles = np.array([particle() for i in range(N)])
+
+    # Get system potential energy
+    def getHam(self):
+        ham = 0
+        for i in range(0, len(self.particles) - 1):
+            for j in range(i + 1, len(self.particles)):
+                r = np.linalg.norm(self.particles[j].pos - self.particles[i].pos)
+                if r < cutoff:
+                    ham += lenJones(r)
+        return ham
+    
+    # Display particles in system
+    def displayParticles(self):
+        xList = [particle.pos[0] for particle in self.particles]
+        yList = [particle.pos[1] for particle in self.particles]
+        zList = [particle.pos[2] for particle in self.particles]
+        fig = plt.figure()
+        ax = fig.add_subplot(projection='3d')
+        ax.scatter(xList, yList, zList, marker="o")
+        plt.show()
+    
+    # Get particles within a specified region
+    
+    def get_particles_in_region(self, coords1, coords2):
+        selected_particles = []
+        
+        #min_coords = np.minimum(coords1, coords2)
+        #max_coords = np.maximum(coords1, coords2)
+        
+        for particle in self.particles:
+            if all(min_coords <= particle.pos) and all(particle.pos <= max_coords):
+                selected_particles.append(particle)
+        
+        return selected_particles
 
 class particle():
 	
@@ -91,13 +105,13 @@ class particle():
 B = box()
 print(lenJones(10))
 print(B.getHam())
-B.displayParticles()
+
 
 # generate boxes 27 (3-dimensions) 
+boxes = []
+for _ in range(27):  # Use _ or another variable name
+    boxes.append(box())
 
-boxes = [] 
-for box in range(27): # adds the 27 box objects to boxes list
-	boxes.append(box())
 
 # define pos of box objects
 
@@ -107,9 +121,30 @@ for box in range(27): # adds the 27 box objects to boxes list
 # copy the box objects
 
 
-
-# 
 # determining potentals, pair potentials 
+
+B = box()
+R_c = 50
+
+
+# Define region boundaries (min and max coordinates)
+min_coords = np.array([0, 0, 0])  # specify the minimum x, y, z
+max_coords = np.array([cubeSide, cubeSide, cubeSide])  # specify the maximum x, y, z
+
+for 
+
+min_coords = np.array([(cubeSide-R_c), 0, 0])  # specify the minimum x, y, z
+max_coords = np.array([cubeSide, cubeSide, cubeSide]) # specify the maximum x, y, z
+
+region_box = box()
+particles_in_region = region_box.get_particles_in_region(min_coords, max_coords)
+
+print("Number of particles in region:", len(particles_in_region))
+
+
+
+
+
 # calculate boundry potentals, bend potential
 # obtain hamitoian new - old
 # determine probabilty 
