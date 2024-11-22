@@ -1,6 +1,8 @@
 #Import modules
 import numpy as np
 import matplotlib.pyplot as plt
+import itertools
+
 
 #Units: angstroms, daltons, kelvin, mole
 #Boltzmann constant defined as 1
@@ -74,10 +76,14 @@ class box():
         return ham
     
     # Display particles in system
-    def displayParticles(self):
-        xList = [particle.pos[0] for particle in self.particles]
-        yList = [particle.pos[1] for particle in self.particles]
-        zList = [particle.pos[2] for particle in self.particles]
+    def displayParticles(self, particles=None):
+        if particles is None:
+            particles = self.particles
+    
+        xList = [p.pos[0] for p in particles]
+        yList = [p.pos[1] for p in particles]
+        zList = [p.pos[2] for p in particles]
+        
         fig = plt.figure()
         ax = fig.add_subplot(projection='3d')
         ax.scatter(xList, yList, zList, marker="o")
@@ -87,10 +93,7 @@ class box():
     
     def get_particles_in_region(self, coords1, coords2):
         selected_particles = []
-        
-        #min_coords = np.minimum(coords1, coords2)
-        #max_coords = np.maximum(coords1, coords2)
-        
+    
         for particle in self.particles:
             if all(min_coords <= particle.pos) and all(particle.pos <= max_coords):
                 selected_particles.append(particle)
@@ -108,42 +111,34 @@ print(B.getHam())
 
 
 # generate boxes 27 (3-dimensions) 
-boxes = []
-for _ in range(27):  # Use _ or another variable name
-    boxes.append(box())
-
-
-# define pos of box objects
-
-
-
-
-# copy the box objects
-
 
 # determining potentals, pair potentials 
 
-B = box()
+# Define region boundries
+
 R_c = 50
+min_coords = np.array([0, 0, 0]) 
+inital_array = [R_c, cubeSide, cubeSide]
+volumes = []
+region_box = B
 
+for _ in range(0, 3):
+    max_coords = np.array(np.roll((inital_array), _))
+    particles_in_region = region_box.get_particles_in_region(min_coords, max_coords)
+    volumes.append(particles_in_region)
 
-# Define region boundaries (min and max coordinates)
-min_coords = np.array([0, 0, 0])  # specify the minimum x, y, z
-max_coords = np.array([cubeSide, cubeSide, cubeSide])  # specify the maximum x, y, z
+max_coords = np.array([cubeSide, cubeSide, cubeSide])
+inital_array = [(cubeSide-R_c), 0, 0]
 
-for 
+for _ in range(0,3):
+    min_coords = np.array(np.roll((inital_array), _))
+    particles_in_region = region_box.get_particles_in_region(min_coords, max_coords)
+    volumes.append(particles_in_region)
 
-min_coords = np.array([(cubeSide-R_c), 0, 0])  # specify the minimum x, y, z
-max_coords = np.array([cubeSide, cubeSide, cubeSide]) # specify the maximum x, y, z
+for i in range(len(volumes)):
+    print("Number of particles in region:" + str(i) + " " + str(len(volumes[i])))
 
-region_box = box()
-particles_in_region = region_box.get_particles_in_region(min_coords, max_coords)
-
-print("Number of particles in region:", len(particles_in_region))
-
-
-
-
+B.displayParticles(volumes[0])
 
 # calculate boundry potentals, bend potential
 # obtain hamitoian new - old
